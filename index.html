@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudFlix AWS</title>
+  <!-- Icono para la pestaña del navegador -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+  <!-- Aquí conectamos con el archivo de diseño (colores) -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Encabezado de la pagina -->
+  <header>
+    <h1> CloudFlix AWS </h1>
+  </header>
+
+  <div class="contenedor">
+    <!-- SECCIÓN 1: Formulario para subir videos -->
+    <section class="caja">
+      <h2>1. Subir un video</h2>
+      <form id="formularioSubida">
+        <input type="file" id="archivoVideo" accept="video/mp4" required>
+        <button type="submit">Enviar a la Nube</button>
+      </form>
+    </section>
+
+    <!-- SECCIÓN 2: El reproductor de pantalla grande -->
+    <section class="caja">
+      <h2>2. Reproductor</h2>
+      <video id="reproductorPrincipal" controls width="100%">
+        <source id="fuenteVideo" src="" type="video/mp4">
+        Tu navegador no soporta la etiqueta de video.
+      </video>
+    </section>
+
+    <!-- SECCIÓN 3: La lista o catalogo de videos disponibles -->
+    <section class="caja">
+      <h2>3. Lista de Videos</h2>
+      <div id="listaVideos" class="cuadricula">
+        <!-- Los videos apareceran aqui automaticamente -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Conexion con el archivo de funciones -->
+  <script src="app.js"></script>
+</body>
+</html>

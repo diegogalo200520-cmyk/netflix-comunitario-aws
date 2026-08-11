@@ -1,123 +1,132 @@
-/* Estilos */
+/* --- RESET Y ESTILOS GENERALES --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-  background-color: #141414;
-  color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 20px;
+    background-color: #141414;
+    color: #ffffff;
+    padding: 20px;
 }
 
 header {
-  text-align: center;
-  padding: 10px 0;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 header h1 {
-  color: #e50914;
-  font-size: 2.5rem;
-  margin: 0;
+    color: #e50914; /* Rojo Netflix */
+    font-size: 2.5rem;
 }
 
 .contenedor {
-  max-width: 900px;
-  margin: 0 auto;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
+/* --- ESTILOS DE LAS CAJAS/SECCIONES --- */
 .caja {
-  background-color: #1f1f1f;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    background-color: #1f1f1f;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 20px;
 }
 
 .caja h2 {
-  color: #e50914;
-  margin-top: 0;
+    color: #e50914;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
 }
 
-/* Formulario */
-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+/* --- SECCIÓN 1: FORMULARIO DE SUBIDA --- */
+#formularioSubida {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-input[type="file"] {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #444;
-  flex: 1;
+#archivoVideo {
+    flex: 1;
+    min-width: 200px;
+    background-color: #2b2b2b;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 8px;
+    border-radius: 4px;
 }
 
-button {
-  background-color: #e50914;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
+#btnSubir {
+    background-color: #e50914;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease;
 }
 
-button:hover {
-  background-color: #f40612;
+#btnSubir:hover {
+    background-color: #b81d24;
 }
 
-/* Reproductor */
-video {
-  border-radius: 8px;
-  background-color: #000;
-  max-height: 450px;
+/* --- SECCIÓN 2: REPRODUCTOR --- */
+#reproductorPrincipal {
+    background-color: #000;
+    border-radius: 6px;
+    max-height: 450px;
 }
 
-/* Tarjetas de Videos */
+/* --- SECCIÓN 3: LISTA DE VIDEOS (BOTÓN AL LADO DEL NOMBRE) --- */
 .cuadricula {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.tarjeta-video {
-  background-color: #2b2b2b;
-  padding: 15px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-left: 4px solid #e50914;
+/* Tarjeta individual con alineación horizontal */
+.video-card {
+    background-color: #2b2b2b;
+    padding: 12px 16px;
+    border-radius: 6px;
+    display: flex; /* Activa Flexbox */
+    justify-content: space-between; /* Nombre a la izquierda, botón a la derecha */
+    align-items: center; /* Alinea verticalmente al centro */
+    gap: 15px;
+    border: 1px solid #3d3d3d;
 }
 
-.info-video p {
-  margin: 0;
+.video-card h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    word-break: break-all; /* Evita que nombres largos rompan el diseño */
 }
 
-.etiqueta-propietario {
-  font-size: 0.85rem;
-  color: #aaa;
-  margin-top: 4px !important;
+/* Estilo del botón "Ver Video" */
+.video-card button {
+    background-color: #e50914;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap; /* Evita que el texto del botón se divida en dos líneas */
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.acciones-video {
-  display: flex;
-  gap: 8px;
+.video-card button:hover {
+    background-color: #b81d24;
+    transform: scale(1.03);
 }
 
-.btn-ver {
-  background-color: #28a745;
-}
-
-.btn-ver:hover {
-  background-color: #218838;
-}
-
-.btn-eliminar {
-  background-color: #dc3545;
-}
-
-.btn-eliminar:hover {
-  background-color: #c82333;
+.video-card button:active {
+    transform: scale(0.98);
 }

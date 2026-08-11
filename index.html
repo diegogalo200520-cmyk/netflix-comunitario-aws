@@ -27,7 +27,7 @@
     <!-- SECCIÓN 2: El reproductor de pantalla grande -->
     <section class="caja">
       <h2>2. Reproductor</h2>
-      <video id="reproductorPrincipal" controls width="100%" src="video1prueba.mp4">
+      <video id="reproductorPrincipal" controls width="100%">
         Tu navegador no soporta la etiqueta de video.
       </video>
     </section>
@@ -36,13 +36,7 @@
     <section class="caja">
       <h2>3. Lista de Videos</h2>
       <div id="listaVideos" class="cuadricula">
-        <!-- Tarjeta inicial por defecto -->
-        <div class="tarjeta-video" style="padding: 15px; background: #222; border-radius: 8px; margin-top: 10px;">
-          <p><strong>video1prueba.mp4</strong></p>
-          <button type="button" onclick="cargarYReproducir('video1prueba.mp4')">
-            ▶ Ver Video
-          </button>
-        </div>
+        <!-- La lista se llenará dinámicamente cuando los usuarios suban sus videos MP4 -->
       </div>
     </section>
   </div>

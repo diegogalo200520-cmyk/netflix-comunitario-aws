@@ -1,92 +1,117 @@
-// Identificador único simulado del usuario de la sesión actual
-const ID_USUARIO_ACTUAL = "usuario_sesion_local";
+const API_URL = "https://5ylhi77wgl.execute-api.us-east-1.amazonaws.com";
+const CLOUDFRONT_URL = "https://d2xiopbjkkrmde.cloudfront.net";
 
-// Función para cargar y reproducir el video MP4 seleccionado
-function cargarYReproducir(urlVideo) {
-  const reproductor = document.getElementById('reproductorPrincipal');
-  if (reproductor) {
-    reproductor.pause();
-    reproductor.removeAttribute('src');
-    reproductor.src = urlVideo;
-    reproductor.load();
-    reproductor.play().catch(error => {
-      console.log("Presiona el botón de Play en el reproductor para iniciar la reproducción:", error);
-    });
-  }
-}
-
-// Función para eliminar únicamente si el usuario es el propietario del video
-function eliminarVideoPropio(elementoBoton, IDPropietario) {
-  if (IDPropietario !== ID_USUARIO_ACTUAL) {
-    alert("⛔ Acceso denegado: Solo el propietario que subió este video tiene permisos para eliminarlo.");
-    return;
-  }
-
-  const confirmacion = confirm("¿Estás seguro de que deseas eliminar este video de tu catálogo?");
-  if (confirmacion) {
-    const tarjeta = elementoBoton.closest('.tarjeta-video');
-    if (tarjeta) {
-      tarjeta.remove();
-      alert("✅ El video ha sido eliminado de tu catálogo.");
+// 1. Escuchar submit
+document.addEventListener("DOMContentLoaded", () => {
+    const formulario = document.getElementById("formularioSubida");
+    if (formulario) {
+        formulario.addEventListener("submit", subirVideo);
     }
-  }
-}
+    cargarCatalogo();
+});
 
-// Inicialización de la interfaz y control de subida de archivos MP4
-document.addEventListener('DOMContentLoaded', () => {
-  const formulario = document.getElementById('formularioSubida');
-  const inputArchivo = document.getElementById('archivoVideo');
-  const listaVideos = document.getElementById('listaVideos');
+// 2. Subir video enviando el título en la URL
+async function subirVideo(event) {
+    if (event) event.preventDefault();
 
-  if (formulario) {
-    formulario.addEventListener('submit', (e) => {
-      e.preventDefault();
+    const fileInput = document.getElementById('archivoVideo');
+    const btnSubir = document.getElementById('btnSubir');
+    const file = fileInput.files[0];
 
-      if (inputArchivo.files && inputArchivo.files[0]) {
-        const archivo = inputArchivo.files[0];
+    if (!file) {
+        alert("Por favor selecciona un archivo primero.");
+        return;
+    }
 
-        // Validar extensión explícitamente a formato .mp4
-        if (!archivo.name.toLowerCase().endsWith('.mp4')) {
-          alert("Por favor selecciona un archivo en formato .mp4 válido.");
-          return;
+    btnSubir.innerText = "Obteniendo URL...";
+    btnSubir.disabled = true;
+
+    try {
+        // Enviar el nombre del archivo codificado en el Query Parameter 'titulo'
+        const urlPeticion = `${API_URL}/upload-url?titulo=${encodeURIComponent(file.name)}`;
+        
+        const response = await fetch(urlPeticion, { method: 'POST' });
+        const data = await response.json();
+
+        if (!data.uploadUrl) {
+            throw new Error("No se pudo obtener la URL de subida.");
         }
 
-        // Crear una URL local temporal para la sesión
-        const urlObjeto = URL.createObjectURL(archivo);
+        btnSubir.innerText = "Subiendo a S3...";
 
-        // Crear la tarjeta interactiva para el video subido
-        const nuevaTarjeta = document.createElement('div');
-        nuevaTarjeta.className = 'tarjeta-video';
-        nuevaTarjeta.dataset.propietario = ID_USUARIO_ACTUAL;
-
-        nuevaTarjeta.innerHTML = `
-          <div class="info-video">
-            <p><strong>${archivo.name}</strong></p>
-            <p class="etiqueta-propietario">Propietario: Tú (Sesión activa)</p>
-          </div>
-          <div class="acciones-video">
-            <button type="button" class="btn-ver">▶ Ver Video</button>
-            <button type="button" class="btn-eliminar">🗑️ Eliminar</button>
-          </div>
-        `;
-
-        // Evento para reproducir el video en pantalla grande
-        nuevaTarjeta.querySelector('.btn-ver').addEventListener('click', () => {
-          cargarYReproducir(urlObjeto);
+        // Subida directa a S3
+        const uploadResponse = await fetch(data.uploadUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'video/mp4' },
+            body: file
         });
 
-        // Evento con control de permisos para eliminar el video
-        nuevaTarjeta.querySelector('.btn-eliminar').addEventListener('click', (e) => {
-          eliminarVideoPropio(e.target, nuevaTarjeta.dataset.propietario);
+        if (uploadResponse.ok) {
+            alert("¡Video subido con éxito!");
+            fileInput.value = "";
+            setTimeout(cargarCatalogo, 1000);
+        } else {
+            throw new Error("Error al subir el archivo a S3.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error en el proceso de subida.");
+    } finally {
+        btnSubir.innerText = "Enviar a la Nube";
+        btnSubir.disabled = false;
+    }
+}
+
+// 3. Cargar catálogo mostrando el título de DynamoDB
+async function cargarCatalogo() {
+    const contenedor = document.getElementById('listaVideos');
+    if (!contenedor) return;
+
+    try {
+        const res = await fetch(`${API_URL}/videos`);
+        const videos = await res.json();
+
+        contenedor.innerHTML = "";
+
+        if (!videos || videos.length === 0) {
+            contenedor.innerHTML = "<p>No hay videos disponibles.</p>";
+            return;
+        }
+
+        videos.forEach(video => {
+            const keyS3 = video.nombreArchivo || video.key || video.Key || video.filename;
+            
+            // Prioriza el título guardado en DynamoDB; si no existe, usa la Key de S3
+            const tituloMostrar = video.titulo || keyS3;
+            const urlCloudFront = `${CLOUDFRONT_URL}/${keyS3}`;
+
+            const card = document.createElement('div');
+            
+            card.style.display = "flex";
+            card.style.justifyContent = "space-between";
+            card.style.alignItems = "center";
+            card.style.backgroundColor = "#2b2b2b";
+            card.style.padding = "12px 16px";
+            card.style.borderRadius = "6px";
+            card.style.marginTop = "10px";
+            card.style.border = "1px solid #3d3d3d";
+
+            card.innerHTML = `
+                <h3 style="margin: 0; font-size: 1rem; color: #ffffff; word-break: break-all;">${tituloMostrar}</h3>
+                <button onclick="reproducirVideo('${urlCloudFront}')" style="background-color: #e50914; color: #ffffff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; white-space: nowrap; margin-left: 10px;">▶ Ver Video</button>
+            `;
+            contenedor.appendChild(card);
         });
+    } catch (error) {
+        console.error("Error cargando catálogo:", error);
+    }
+}
 
-        // Insertar tarjeta en la lista y reproducir automáticamente
-        listaVideos.appendChild(nuevaTarjeta);
-        cargarYReproducir(urlObjeto);
-
-        alert(`¡El video "${archivo.name}" se subió y guardó correctamente en el catálogo!`);
-        formulario.reset();
-      }
-    });
-  }
-});
+// 4. Reproducir video
+function reproducirVideo(url) {
+    const reproductor = document.getElementById('reproductorPrincipal');
+    if (reproductor) {
+        reproductor.src = url;
+        reproductor.play().catch(err => console.log("Inicia la reproducción manual:", err));
+    }
+}

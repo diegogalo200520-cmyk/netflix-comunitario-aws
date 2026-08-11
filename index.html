@@ -6,12 +6,10 @@
   <title>CloudFlix AWS</title>
   <!-- Icono para la pestaña del navegador -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-  <!-- Conexión con el archivo de diseño -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Encabezado de la página -->
   <header>
     <h1>CloudFlix AWS</h1>
   </header>
@@ -29,9 +27,7 @@
     <!-- SECCIÓN 2: El reproductor de pantalla grande -->
     <section class="caja">
       <h2>2. Reproductor</h2>
-      <!-- Se incluye el archivo local para reproducción directa sin depender del servidor -->
       <video id="reproductorPrincipal" controls width="100%" src="video1prueba.mp4">
-        <source id="fuenteVideo" src="video1prueba.mp4" type="video/mp4">
         Tu navegador no soporta la etiqueta de video.
       </video>
     </section>
@@ -40,10 +36,10 @@
     <section class="caja">
       <h2>3. Lista de Videos</h2>
       <div id="listaVideos" class="cuadricula">
-        <!-- Ejemplo de respaldo para la tarjeta de catálogo local -->
-        <div class="tarjeta-video" style="padding: 10px; background: #222; border-radius: 8px; margin-top: 10px;">
-          <p><strong>Video de Prueba 1</strong></p>
-          <button onclick="document.getElementById('reproductorPrincipal').src='video1prueba.mp4'; document.getElementById('reproductorPrincipal').play();">
+        <!-- Tarjeta inicial por defecto -->
+        <div class="tarjeta-video" style="padding: 15px; background: #222; border-radius: 8px; margin-top: 10px;">
+          <p><strong>video1prueba.mp4</strong></p>
+          <button type="button" onclick="cargarYReproducir('video1prueba.mp4')">
             ▶ Ver Video
           </button>
         </div>
@@ -51,7 +47,6 @@
     </section>
   </div>
 
-  <!-- Conexión con el archivo de funciones -->
   <script src="app.js"></script>
 </body>
 </html>

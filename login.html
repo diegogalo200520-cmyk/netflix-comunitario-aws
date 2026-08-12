@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudFlix AWS - Iniciar Sesión</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+
+    .tabs button {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 6px 12px;
+      transition: color 0.2s ease;
+    }
+
+    .tabs button.active {
+      color: #ffffff;
+      border-bottom: 2px solid #e50914;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      background-color: #2b2b2b;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #e50914;
+    }
+
+    .btn-auth {
+      background-color: #e50914;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background 0.2s ease;
+    }
+
+    .btn-auth:hover {
+      background-color: #b81d24;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .confirm-text {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CloudFlix AWS</h1>
+  </header>
+
+  <div class="auth-container caja">
+    
+    <!-- Pestañas con type="button" explícito para evitar submit accidental -->
+    <div class="tabs">
+      <button type="button" id="btn-tab-login" class="active">Iniciar Sesión</button>
+      <button type="button" id="btn-tab-signup">Registrarse</button>
+    </div>
+
+    <!-- Formulario Iniciar Sesión -->
+    <form id="form-login">
+      <input type="email" id="login-email" placeholder="Correo electrónico" required>
+      <input type="password" id="login-password" placeholder="Contraseña" required>
+      <button type="submit" class="btn-auth">Entrar</button>
+    </form>
+
+    <!-- Formulario Registro -->
+    <form id="form-signup" style="display: none;">
+      <input type="email" id="signup-email" placeholder="Correo electrónico" required>
+      <input type="password" id="signup-password" placeholder="Contraseña (Mínimo 8 caracteres)" required>
+      <button type="submit" class="btn-auth">Crear Cuenta</button>
+    </form>
+
+    <!-- Formulario Confirmación -->
+    <form id="form-confirm" style="display: none;">
+      <p class="confirm-text">Ingresa el código que recibiste en tu correo:</p>
+      <input type="text" id="confirm-code" placeholder="Código de 6 dígitos" required>
+      <button type="submit" class="btn-auth">Verificar Código</button>
+    </form>
+
+    <p id="auth-message" class="message"></p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.1354.0/aws-sdk.min.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

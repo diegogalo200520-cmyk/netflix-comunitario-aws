@@ -80,6 +80,12 @@ async function subirVideo(event) {
 
         const data = await response.json();
 
+        // VALIDACIÓN DE ERRORES HTTP (400, 500, etc.)
+        if (!response.ok) {
+            // Muestra el mensaje enviado desde la Lambda ("Límite alcanzado...")
+            throw new Error(data.error || "Ocurrió un error al procesar la solicitud.");
+        }
+
         if (!data.uploadUrl) {
             throw new Error("No se pudo obtener la URL presignada de subida.");
         }

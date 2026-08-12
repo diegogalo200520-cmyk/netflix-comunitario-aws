@@ -3,6 +3,25 @@ const poolData = {
   ClientId: '31bg4qeprqgdemjgo83favbvbv'
 };
 
+// Función para alternar la visibilidad de cualquier input de contraseña
+function setupPasswordToggle(inputId, toggleBtnId) {
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById(toggleBtnId);
+
+  if (input && btn) {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // Previene envío accidental de formulario
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+      }
+    });
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const formLogin = document.getElementById('form-login');
   const formSignup = document.getElementById('form-signup');
@@ -12,6 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTabSignup = document.getElementById('btn-tab-signup');
 
   let registeredEmail = '';
+
+  // Configurar botones de ojito para mostrar/ocultar contraseña
+  setupPasswordToggle('login-password', 'btn-toggle-login-pass');
+  setupPasswordToggle('signup-password', 'btn-toggle-signup-pass');
 
   // Cambio manual de vistas en el DOM
   btnTabLogin.onclick = (e) => {

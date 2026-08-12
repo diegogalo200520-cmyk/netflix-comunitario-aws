@@ -10,8 +10,20 @@
 </head>
 <body>
 
-  <header>
-    <h1>CloudFlix AWS</h1>
+  <!-- Guardián de Autenticación: Valida sesión antes de renderizar nada -->
+  <script>
+    if (!localStorage.getItem('jwtToken')) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <header style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #141414;">
+    <h1 style="margin: 0; color: #e50914;">CloudFlix AWS</h1>
+    
+    <!-- Botón de Cerrar Sesión -->
+    <button id="btnLogout" style="background-color: #333; color: #fff; border: 1px solid #555; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+      Cerrar Sesión
+    </button>
   </header>
 
   <div class="contenedor">
@@ -36,7 +48,7 @@
     <section class="caja">
       <h2>3. Lista de Videos</h2>
       <div id="listaVideos" class="cuadricula">
-        <!-- La lista se llenará dinámicamente cuando los usuarios suban sus videos MP4 -->
+        <!-- La lista se llenará dinámicamente -->
       </div>
     </section>
   </div>
